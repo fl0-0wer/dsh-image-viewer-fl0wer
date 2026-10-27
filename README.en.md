@@ -1,84 +1,17 @@
-<div align="center">
+# DSH Image Viewer — fl0wer modified distribution
 
-# DSH Image Viewer
+This is an MIT-licensed modification of [WSL043/dsh-image-viewer](https://github.com/WSL043/dsh-image-viewer), **not a from-scratch original**. WSL043 is the original author; fl0-0wer maintains this distribution of the locally used changes.
 
-A lightweight viewer for zooming, browsing, downloading, and annotating images already shown by DSH.
+Version `dsh-image-viewer-fl0wer@0.1.17` distributes readable prebuilt JavaScript derived from the installed 0.1.16 viewer. `lib/client.js` is the authoritative runtime implementation. Inherited upstream `src/`, tests and build configuration are reference material and do not incorporate all fork modifications. Running the upstream build would overwrite the modified runtime. See `MODIFICATIONS.md` and `PATCHES/` for provenance and reproduction limitations.
 
-[![CI](https://github.com/WSL043/dsh-image-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/WSL043/dsh-image-viewer/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/dsh-image-viewer?logo=npm&label=npm)](https://www.npmjs.com/package/dsh-image-viewer)
-[![total npm downloads](https://img.shields.io/npm/dt/dsh-image-viewer?logo=npm&label=total%20downloads)](https://www.npmjs.com/package/dsh-image-viewer)
-[![status](https://img.shields.io/badge/status-Stable%20release-15803d.svg)](#install)
-[![MIT](https://img.shields.io/badge/license-MIT-111111.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/WSL043/dsh-image-viewer?style=flat&logo=github&label=stars)](https://github.com/WSL043/dsh-image-viewer/stargazers)
+The original supplies zoom, pan, actual size, gallery navigation, download, region notes and composer handoff. Local modifications add red/blue/white freehand strokes per image source, composited PNG clipboard copying, original-image candidate fallback across display/download/annotation preparation, and layout/inline-entry adjustments. Availability depends on accessible image sources, CORS and browser image clipboard support; fallback does not manufacture unavailable original pixels.
 
-[中文](README.md) · [Install](#install) · [Privacy](#privacy)
+Download the pinned `.tgz` from this repository's [Releases](https://github.com/fl0-0wer/dsh-image-viewer-fl0wer/releases) and install it through DSH plugin management. Disable the original `dsh-image-viewer` first. Both variants provide the same viewer service and retain Cordis row ID `wsl043-native-image-viewer`; do not enable them together. The fork package and client module ID are `dsh-image-viewer-fl0wer`.
 
-</div>
+Dependency ranges are inherited from upstream and are listed in `package.json` and `compatibility.json`. This release validates static and package delivery contracts; it does not claim interactive qualification on every listed host version. Node.js requirement: `^22.19.0 || >=24.0.0`.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/WSL043/dsh-image-viewer/main/docs/assets/image-viewer-en.png" width="900" alt="DSH Image Viewer with zoom, download, and a numbered region note">
-</p>
+Readable `lib/*.js` and documented patches are open for review and modification. An unfinished source port is excluded from the installable package. Stale source maps are not distributed. The original copyright and MIT license remain in `LICENSE`; see `THIRD_PARTY_NOTICES.md` for attribution.
 
-## Features
+Fork: https://github.com/fl0-0wer/dsh-image-viewer-fl0wer
 
-- Pointer-centered zoom, drag, touch pinch, double-click 100%, fit/original-size controls, keyboard navigation, and multi-image galleries.
-- Shows filenames, dimensions, and scale; large images can reach 100% and stay visible when the window is resized.
-- Original-file downloads show available progress and can be cancelled or retried; switching images or closing the viewer cancels a download.
-- Clear loading and retryable error states; image changes reset gestures and keep annotations separate.
-- Mark image regions and edit notes beside their numbered markers. Enter saves; Shift+Enter adds a line.
-- Closing an annotated native DSH image adds its numbered PNG and notes to the current draft without sending or duplicating them; failures remain retryable.
-- DSH light/dark themes, responsive layout, focus containment, and reduced-motion support.
-
-## Install
-
-**[DSH-Portable](https://github.com/WSL043/DSH-Portable) ships with this plugin preinstalled.** Enable or uninstall it on the Plugins page; other DSH users can install it below.
-
-### Plugin page (recommended)
-
-1. Open **Plugins → Add plugin** in DSH.
-2. Paste this line into **Package name or address**, then select Install:
-
-```text
-dsh-image-viewer@0.1.16
-```
-
-3. Follow the result shown on the page; refresh or restart only when requested.
-
-<!-- dsh-compatibility -->
-**Version 0.1.16 supports DSH cores `0.2.1-rc.3`, `0.2.1-rc.2`, `0.2.1-rc.1`, `0.2.1-alpha.5`, and `0.2.1-alpha.4`.**
-<!-- /dsh-compatibility -->
-
-### Terminal (optional)
-
-For official DSH Desktop, install its bundled command through **Manage dsh Command…**; after initialization, fully quit the app before using `--profile desktop`. DSH-Portable 0.x and the Web profile use `--profile web`.
-
-```sh
-dsh plugin --profile desktop add dsh-image-viewer@0.1.16
-dsh plugin --profile web add dsh-image-viewer@0.1.16
-```
-
-After a terminal operation, restart the corresponding profile as prompted by the host.
-
-## Update and uninstall
-
-Update or uninstall from the **Plugins** page. If no update action is offered, enter the target `package@version` under **Add plugin**. To uninstall from a terminal, run `dsh plugin --profile web remove dsh-image-viewer`; for official Desktop, quit the app and use the `desktop` profile as described above.
-
-Uninstalling restores DSH's built-in image viewer and does not delete conversations or images.
-
-## Privacy
-
-The plugin reads only image URLs already rendered by DSH; it does not call a model or read provider credentials. Annotations use DSH's attachment and draft APIs, leaving the decision to send with the user. Reopening an image in the current page may retain its note; this does not mean it was sent or permanently stored.
-
-## Support
-
-Use the [bug report form](https://github.com/WSL043/dsh-image-viewer/issues/new?template=bug-report.yml) with the plugin/DSH versions, operating system, image location, and failed action. Do not include private images, credentials, or full session logs. Report security issues privately through [GitHub Security Advisories](https://github.com/WSL043/dsh-image-viewer/security/advisories/new).
-
-## License and quality
-
-[MIT](LICENSE). Each declared core is checked in the live interface.
-
-## Developers
-
-When calling `nativeImageViewer.open()`, `download.onInvoke` receives `{ item, src, signal, onProgress }`. Pass `signal` to the download request and report bytes with `onProgress({ loaded, total })`; omit `total` when the size is unknown. Custom transfers must honor `signal` to support cancellation. Download authorization and original-file checks remain the image provider's responsibility.
-
-[简体中文](README.md) · [Awesome DSH listing](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/blob/main/data/plugins/WSL043__dsh-image-viewer.yml) · [Chat Manager](https://github.com/WSL043/dsh-chat-manager)
+Upstream: https://github.com/WSL043/dsh-image-viewer

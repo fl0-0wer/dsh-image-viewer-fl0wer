@@ -1,84 +1,36 @@
-<div align="center">
+# DSH Image Viewer — fl0wer 修改版
 
-# DSH Image Viewer · 图片查看器
+> 基于 [WSL043/dsh-image-viewer](https://github.com/WSL043/dsh-image-viewer) 的 MIT 开源修改版，**不是从零原创**。原作者为 WSL043；本分支由 fl0-0wer 整理、发布现用的社区修改。
 
-放大、浏览、下载并标注 DSH 已显示图片的轻量查看器。
+本次发行 `dsh-image-viewer-fl0wer@0.1.17` 以本机正在使用的 0.1.16 预构建 JavaScript 为基础。可读的 `lib/client.js` 是本版本运行实现；继承仓库中的上游 `src/`、测试与构建配置仅供参考，不代表本分支修改已经完整回移至源码工程。不要运行上游构建来重建本发行包，它会覆盖修改。补丁来源及准确差异见 `MODIFICATIONS.md` 和 `PATCHES/`。
 
-[![CI](https://github.com/WSL043/dsh-image-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/WSL043/dsh-image-viewer/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/dsh-image-viewer?logo=npm&label=npm)](https://www.npmjs.com/package/dsh-image-viewer)
-[![npm 总下载量](https://img.shields.io/npm/dt/dsh-image-viewer?logo=npm&label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F)](https://www.npmjs.com/package/dsh-image-viewer)
-[![状态](https://img.shields.io/badge/%E7%8A%B6%E6%80%81-Stable%20release-15803d.svg)](#安装)
-[![MIT](https://img.shields.io/badge/license-MIT-111111.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/WSL043/dsh-image-viewer?style=flat&logo=github&label=stars)](https://github.com/WSL043/dsh-image-viewer/stargazers)
+## 功能与归属
 
-[English](README.en.md) · [安装](#安装) · [隐私](#隐私)
+原作提供缩放、拖拽、原始大小、多图画廊、下载、区域备注和会话草稿交接。
 
-</div>
+此分支保留实际使用的修改：
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/WSL043/dsh-image-viewer/main/docs/assets/image-viewer-zh.png" width="900" alt="DSH 图片查看器展示缩放、下载与区域备注">
-</p>
+- 自由手绘，红、蓝、白三色画笔；笔迹按图片源隔离。
+- 将图片、手绘笔迹和区域标记合成为 PNG，复制到浏览器图像剪贴板。
+- 在来源允许访问时，尝试全尺寸声明源、去尺寸参数代理、原图 URL 和原缩略图；显示、下载和标注合成使用候选回退。
+- 查看器顶部布局与内联图片入口调整。
 
-## 功能
-
-- 以鼠标位置为中心缩放、拖动、双指缩放和双击查看原始大小；支持适应窗口、键盘切换与多图浏览。
-- 显示图片名称、尺寸和缩放比例；大图可查看 100%，调整窗口后图片仍可见。
-- 原图下载显示可用进度，可取消或重试；切图或关闭查看器会取消下载。
-- 提供清晰的加载和错误状态，失败可重试；切图会重置拖动状态并隔离各图标注。
-- 点击标记区域并在编号旁编辑备注；Enter 保存，Shift+Enter 换行。
-- 关闭原生 DSH 图片时，可将编号图片和备注加入当前会话草稿，保留已有文字但不自动发送；避免重复添加，失败可重试。
-- 适配 DSH 亮/暗色主题、响应式布局、焦点约束和减少动态效果设置。
+来源访问失败、CORS 或浏览器剪贴板权限会影响相应功能；回退链不保证恢复来源本身未提供的高清图。视频中的重绘界面只是操作示意。
 
 ## 安装
 
-**[DSH-Portable](https://github.com/WSL043/DSH-Portable) 已预装本插件**，可在插件页启用或卸载；其他 DSH 用户按下方安装。
+从本仓库 [Releases](https://github.com/fl0-0wer/dsh-image-viewer-fl0wer/releases) 获取 `dsh-image-viewer-fl0wer-0.1.17.tgz`，在 DSH 插件管理中通过安装包安装。Market 条目以其合并与收录状态为准。
 
-### 插件页面（推荐）
+**先停用原版 `dsh-image-viewer`，再启用本分支。** 两者提供同一类图片查看服务并沿用原 Cordis 行 ID `wsl043-native-image-viewer`，请勿同时启用。安装包名及客户端模块 ID 使用 `dsh-image-viewer-fl0wer`。
 
-1. 打开 DSH 的 **插件 → 添加插件**。
-2. 在“包名或地址”中粘贴下面这一行并点击安装：
+本包沿用原作 peer dependency 兼容范围；仅做预构建包的静态与交付验证，不宣称在所有列出的 DSH 版本中完成交互测试。具体范围见 `package.json` 与 `compatibility.json`。Node.js 要求沿用 `^22.19.0 || >=24.0.0`。
 
-```text
-dsh-image-viewer@0.1.16
-```
+## 开发与再分发
 
-3. 查看安装结果；仅在页面要求时刷新或重启。
+查看可读 `lib/*.js`、修改说明和补丁文件即可审阅本版实现。上游源码的完整重构移植仍是独立工作，未完成的移植不包含在安装包中。本版不会用不匹配的 source map 伪装源码对应关系。
 
-<!-- dsh-compatibility -->
-**版本 0.1.16 支持 DSH 内核 `0.2.1-rc.3`、`0.2.1-rc.2`、`0.2.1-rc.1`、`0.2.1-alpha.5`、`0.2.1-alpha.4`。**
-<!-- /dsh-compatibility -->
+MIT 许可证见 `LICENSE`，保留 WSL043 的原始版权与许可文本。第三方归属见 `THIRD_PARTY_NOTICES.md`。
 
-### 终端安装（可选）
+修改版仓库：https://github.com/fl0-0wer/dsh-image-viewer-fl0wer
 
-官方 DSH Desktop 请先通过应用的 **Manage dsh Command…** 安装自带命令；完成一次初始化后，完全退出应用再运行 `--profile desktop`。DSH-Portable 0.x 和网页版使用 `--profile web`。
-
-```sh
-dsh plugin --profile desktop add dsh-image-viewer@0.1.16
-dsh plugin --profile web add dsh-image-viewer@0.1.16
-```
-
-终端操作后按宿主提示重新启动对应 profile。
-
-## 更新与卸载
-
-在 **插件** 页面更新或卸载；没有更新操作时，在“添加插件”中输入目标 `包名@版本`。终端卸载可用 `dsh plugin --profile web remove dsh-image-viewer`；官方 Desktop 按上方说明退出应用并将 profile 换为 `desktop`。
-
-卸载会恢复 DSH 内置图片查看器，不会删除会话或图片。
-
-## 隐私
-
-插件只读取 DSH 已渲染的图片 URL，不调用模型或读取供应商凭据。标注通过 DSH 附件和草稿接口交由用户决定是否发送；页内重开时仍可看到备注，不代表已发送或永久保存。
-
-## 反馈
-
-请使用[问题反馈表单](https://github.com/WSL043/dsh-image-viewer/issues/new?template=bug-report.yml)并提供插件/DSH 版本、系统、图片位置和失败操作。不要提交私人图片、凭据或完整会话日志；安全问题请通过 [GitHub Security Advisories](https://github.com/WSL043/dsh-image-viewer/security/advisories/new) 私下报告。
-
-## 许可证与质量
-
-[MIT](LICENSE)。每个声明支持的内核均已完成真实界面核验。
-
-## 开发者
-
-调用 `nativeImageViewer.open()` 时，`download.onInvoke` 会收到 `{ item, src, signal, onProgress }`。将 `signal` 传给下载请求，并用 `onProgress({ loaded, total })` 上报字节数；文件大小未知时省略 `total`。自定义传输需响应 `signal` 以支持取消；下载权限与原图校验仍由图片提供方负责。
-
-[English](README.en.md) · [Awesome DSH 收录](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/blob/main/data/plugins/WSL043__dsh-image-viewer.yml) · [会话管理插件](https://github.com/WSL043/dsh-chat-manager)
+原作仓库：https://github.com/WSL043/dsh-image-viewer

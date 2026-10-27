@@ -1,7 +1,7 @@
 {
-  "name": "dsh-image-viewer",
-  "version": "0.1.16",
-  "description": "Zoom, pan, download, gallery, and region-note image viewer for DeepSeek Harness",
+  "name": "dsh-image-viewer-fl0wer",
+  "version": "0.1.17",
+  "description": "WSL043's MIT DSH image viewer, distributed with documented community modifications",
   "keywords": [
     "dsh-plugin",
     "deepseek-harness",
@@ -10,7 +10,7 @@
     "zoom",
     "annotation"
   ],
-  "author": "WSL043",
+  "author": "WSL043 (original project); fl0-0wer (fork modifications)",
   "license": "MIT",
   "type": "module",
   "main": "./lib/index.js",
@@ -26,15 +26,18 @@
     "assets/icon.svg",
     "locale/*.json",
     "lib/*.js",
-    "lib/*.map",
     "cordis.patch.yml",
     "README.md",
     "README.zh-CN.md",
+    "README.en.md",
+    "MODIFICATIONS.md",
     "compatibility.json",
     "AGENTS.md",
     "LICENSE",
     "SECURITY.md",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "scripts/verify-prebuilt.mjs",
+    "PATCHES/*"
   ],
   "dsh": {
     "bundle": {
@@ -50,26 +53,18 @@
       "platform": "web"
     }
   },
-  "scripts": {
-    "build": "tsdown --config tsdown.config.mjs",
-    "test:behavior": "node --test tests/viewer.test.mjs tests/image-download.test.mjs",
-    "test:delivery": "node --test tests/package-contract.test.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "check": "pnpm run test && pnpm run build && pnpm pack --pack-destination .artifacts"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WSL043/dsh-image-viewer.git"
+    "url": "git+https://github.com/fl0-0wer/dsh-image-viewer-fl0wer.git"
   },
   "bugs": {
-    "url": "https://github.com/WSL043/dsh-image-viewer/issues"
+    "url": "https://github.com/fl0-0wer/dsh-image-viewer-fl0wer/issues"
   },
-  "homepage": "https://github.com/WSL043/dsh-image-viewer#readme",
+  "homepage": "https://github.com/fl0-0wer/dsh-image-viewer-fl0wer#readme",
   "publishConfig": {
     "access": "public",
     "tag": "latest"
   },
-  "packageManager": "pnpm@11.19.0",
   "engines": {
     "node": "^22.19.0 || >=24.0.0"
   },
@@ -101,15 +96,7 @@
       "optional": true
     }
   },
-  "devDependencies": {
-    "@deepseek-ai/cordis": "4.0.4",
-    "@deepseek-ai/dsh-client-locale": "0.2.1-rc.3",
-    "@deepseek-ai/dsh-client-ui-layout": "0.2.1-rc.3",
-    "@deepseek-ai/dsh-client-ui-primitives": "0.2.1-rc.3",
-    "@deepseek-ai/dsh-client-ui-slots": "0.2.1-rc.3",
-    "playwright": "1.63.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "tsdown": "0.23.0"
+  "scripts": {
+    "verify": "node scripts/verify-prebuilt.mjs"
   }
 }
