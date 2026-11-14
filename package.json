@@ -1,6 +1,6 @@
 {
   "name": "dsh-image-viewer-fl0wer",
-  "version": "0.1.17",
+  "version": "0.1.19",
   "description": "WSL043's MIT DSH image viewer, distributed with documented community modifications",
   "keywords": [
     "dsh-plugin",
